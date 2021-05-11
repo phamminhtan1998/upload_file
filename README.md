@@ -2,7 +2,7 @@
 ## An Example for upload heavy file with grpc 
 ### To add project to your spring project 
 
-Adding Repository to pom.xml
+Adding Repository to pom.xml (Maven)
 ```
  <repositories>
     ...
@@ -13,6 +13,14 @@ Adding Repository to pom.xml
     </repository>
     ...
   </repositories>
+ ```
+ Or ... for Grandle
+ ```java
+ repositories {  
+    maven {  
+        url 'https://repo.repsy.io/mvn/phamminhtan/upload_file'  
+    }  
+}
  ```
   
   Adding package below for maven
