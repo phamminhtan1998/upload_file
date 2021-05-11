@@ -1,0 +1,33 @@
+{
+  "properties": [
+    {
+      "name": "file.client.upload.chunk-size",
+      "type": "java.lang.Integer",
+      "description": "Chunk size per request upload for grpc ."
+    },
+    {
+      "name": "file.server.upload.base-path",
+      "type": "java.lang.String",
+      "description": "Base path save file for file."
+    },
+    {
+      "name": "file.client.upload.address",
+      "type": "java.lang.String",
+      "description": "Domain for grpc server."
+    },
+    {
+      "name": "file.client.upload.port-server",
+      "type": "java.lang.Integer",
+      "description": "Port of grpc server."
+    },
+    {
+      "name": "file.client.upload.max-size-per-message",
+      "type": "java.lang.Integer",
+      "description": "Set max size for a message per request."
+    },
+    {
+      "name": "file.client.upload.deadline",
+      "type": "java.lang.Integer",
+      "description": "The time for waiting response from start call time."
+    }
+  ] }
