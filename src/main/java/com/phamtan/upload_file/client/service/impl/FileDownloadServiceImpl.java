@@ -8,6 +8,7 @@ import com.phamtan.upload_file.client.model.FileDownloadObserver;
 import com.phamtan.upload_file.client.service.FileDownloadService;
 import io.grpc.Deadline;
 import io.grpc.ManagedChannel;
+import io.grpc.StatusException;
 import io.grpc.netty.shaded.io.grpc.netty.NettyChannelBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,8 @@ public class FileDownloadServiceImpl implements FileDownloadService {
                 .setName("test.png")
                 .setPath("Test pass server passing whatever")
                 .build();
-        stub.download(fileDownloadRequest,new FileDownloadObserver(fileDownloadModel));
+            stub.download(fileDownloadRequest,new FileDownloadObserver(fileDownloadModel));
+
     }
 
 }

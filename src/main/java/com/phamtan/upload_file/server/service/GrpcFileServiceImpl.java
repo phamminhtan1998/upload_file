@@ -3,9 +3,10 @@ import com.example.grpc_base.proto.FileOuterClass;
 import com.example.grpc_base.proto.FileServiceGrpc;
 import com.google.protobuf.ByteString;
 import com.phamtan.upload_file.server.config.ServerConfigProperties;
-import com.phamtan.upload_file.server.exception.ExceptionDefine;
+import com.phamtan.upload_file.server.exception.CustomException;
 import io.grpc.stub.ServerCallStreamObserver;
 import io.grpc.stub.StreamObserver;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.nio.file.StandardOpenOption;
 @GrpcService
 @Component
 @ConditionalOnBean(ServerConfigProperties.class)
+@Slf4j
 public class GrpcFileServiceImpl extends FileServiceGrpc.FileServiceImplBase {
 
    private final ServerConfigProperties serverConfigProperties ;
@@ -81,21 +83,19 @@ public class GrpcFileServiceImpl extends FileServiceGrpc.FileServiceImplBase {
                 }
             }
         } catch (FileNotFoundException e) {
-            responseObserver.onError(new ExceptionDefine(
-                    "File not found",
-                    "Error from server",
-                    "This is first description"
-            ));
-            e.printStackTrace();
-            System.out.println("Error on server !");
+            log.error("File not found !");
+           throw  new CustomException(
+                    "FileNotFoundException",
+                    "File Not Existing on Server",
+                    e
+            );
         } catch (IOException e) {
-            responseObserver.onError(new ExceptionDefine(
-                    "File not found",
-                    e.getMessage(),
-                    "This is first description"
-            ));
-            e.printStackTrace();
-            System.out.println("Error on server !");
+            log.error("I/O File error :"+e.getMessage());
+            throw  new CustomException(
+                    "IOException",
+                    "File Not Existing on Server",
+                    e
+            );
         }
     }
         @Override
