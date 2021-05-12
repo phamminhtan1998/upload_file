@@ -8,7 +8,6 @@ public class FileUploadModel {
     private String path;
     private LocalDate uploadDate;
     private String description;
-    private String desPath;
 
     public FileUploadModel() {
     }
@@ -20,16 +19,11 @@ public class FileUploadModel {
         this.path = path;
         this.uploadDate = uploadDate;
         this.description = description;
-        this.desPath = desPath;
     }
 
-    public String getDesPath() {
-        return desPath;
-    }
 
-    public void setDesPath(String desPath) {
-        this.desPath = desPath;
-    }
+
+
 
     public String getName() {
         return name;

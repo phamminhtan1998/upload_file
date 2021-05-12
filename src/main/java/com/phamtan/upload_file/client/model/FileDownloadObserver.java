@@ -46,7 +46,9 @@ public class FileDownloadObserver
     private OutputStream getFilePath(FileDownloadModel fileDownloadModel) throws IOException {
         String filename = fileDownloadModel.getName()+"."+fileDownloadModel.getType();
         Path destinationPath = Paths.get(fileDownloadModel.getDestinationPath());
-        return Files.newOutputStream(destinationPath.resolve(filename), StandardOpenOption.CREATE,StandardOpenOption.APPEND);
+        return Files.newOutputStream(destinationPath.resolve(filename),
+                StandardOpenOption.CREATE,
+                StandardOpenOption.APPEND);
 
     }
     private void writeFile(OutputStream writer, ByteString content)  {

@@ -49,7 +49,6 @@ public class FileDownloadServiceImpl implements FileDownloadService {
                 .setPath("Test pass server passing whatever")
                 .build();
             stub.download(fileDownloadRequest,new FileDownloadObserver(fileDownloadModel));
-
     }
 
 }
