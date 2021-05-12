@@ -27,21 +27,21 @@ import java.util.regex.Pattern;
 
 @Service
 @ConditionalOnBean(FileUploadConfig.class)
-public class FileUploadModelImpl implements FileUploadService {
+public class FileUploadServiceImpl implements FileUploadService {
     private final ThreadPoolExecutor threadPoolExecutor;
     private final FileUploadConfig fileUploadConfig;
     private ManagedChannel channel ;
     private FileServiceGrpc.FileServiceStub stub ;
 
-    public FileUploadModelImpl(@Qualifier("custom-executor-bean") ThreadPoolExecutor threadPoolExecutor,
-                               FileUploadConfig fileUploadConfig) {
+    public FileUploadServiceImpl(@Qualifier("custom-executor-bean") ThreadPoolExecutor threadPoolExecutor,
+                                 FileUploadConfig fileUploadConfig) {
         this.threadPoolExecutor = threadPoolExecutor;
         this.fileUploadConfig = fileUploadConfig;
     }
     @PostConstruct
     private void init(){
         channel = NettyChannelBuilder.forAddress(fileUploadConfig.getDomainServer(),fileUploadConfig.getPortServer())
-                .maxInboundMessageSize(fileUploadConfig.getChunkSize())
+                .maxInboundMessageSize(fileUploadConfig.getMaxSizePerMessage())
                 .keepAliveTimeout(3, TimeUnit.MINUTES)
                 .usePlaintext()
                 .build();
@@ -58,19 +58,27 @@ public class FileUploadModelImpl implements FileUploadService {
         }
     }
     private void uploadFile(FileUploadModel file) throws IOException, InterruptedException{
-//        String[] listString = urlFile.split(Pattern.quote("/"));
-//        String[] nameAndTypeFile = listString[listString.length-1].split(Pattern.quote("."));
-//        String nameFile = listString[listString.length-1]
-//                .replace("."+nameAndTypeFile[nameAndTypeFile.length-1],"");
+        String nameFile ;
+        String typeFile ;
+        if(file.getName()==null||file.getName().trim().isEmpty()){
+            String[] listString = file.getPath().split(Pattern.quote("/"));
+            String[] nameAndTypeFile = listString[listString.length-1].split(Pattern.quote("."));
+             nameFile = listString[listString.length-1]
+                    .replace("."+nameAndTypeFile[nameAndTypeFile.length-1],"");
+             typeFile = nameAndTypeFile[nameAndTypeFile.length-1];
+        }else {
+            nameFile=file.getName();
+            typeFile= file.getType();
+        }
+
         StreamObserver<FileOuterClass.FileUploadRequest> streamObserver = stub.upload(new FileUploadObserver());
         Path path = Paths.get(file.getPath());
         final ClientCallStreamObserver<FileOuterClass.FileUploadRequest> clientCallStreamObserver = (ClientCallStreamObserver<FileOuterClass.FileUploadRequest>) streamObserver;
 
         FileOuterClass.FileUploadRequest metadata = FileOuterClass.FileUploadRequest.newBuilder()
                 .setMetadata(FileOuterClass.MetaData.newBuilder()
-                        .setName(file.getName())
-                        .setType(file.getType()).build()).build();
-
+                        .setName(nameFile)
+                        .setType(typeFile).build()).build();
         streamObserver.onNext(metadata);
         int chunkSize = 1024 * 1024 * 10;
         InputStream inputStream = null;

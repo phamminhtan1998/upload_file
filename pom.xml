@@ -50,13 +50,8 @@
         </dependency>
         <dependency>
             <groupId>com.phamtan</groupId>
-            <artifactId>base</artifactId>
-            <version>0.0.7-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.phamtan</groupId>
             <artifactId>grpc_base</artifactId>
-            <version>0.0.4-SNAPSHOT</version>
+            <version>0.0.7-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
@@ -84,5 +79,12 @@
             </plugin>
         </plugins>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>repsy</id>
+            <name>My Private Maven Repository on Repsy</name>
+            <url>https://repo.repsy.io/mvn/phamminhtan/upload_file</url>
+        </repository>
+    </distributionManagement>
 
 </project>
